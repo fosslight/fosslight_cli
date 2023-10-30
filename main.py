@@ -1,3 +1,4 @@
+from commands import *
 from commands.base import cli
 
 if __name__ == '__main__':
