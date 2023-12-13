@@ -9,8 +9,10 @@ def compare():
     pass
 
 
-@compare.command(name="bom")
-@click.argument('old_project_id', required=True)
-@click.argument('new_project_id', required=True)
-def compare_bom(old_project_id, new_project_id):
-    get_api_client().compare_project(old_project_id, new_project_id)
+@compare.command(name="projectBom")
+@click.option('--prjId', 'prjId', required=True)
+@click.option('--compareId', 'compareId', required=True)
+def compare_project_bom(prjId, compareId):
+    print("compare_project_bom")
+    response = get_api_client().compare_project_bom(prjId, compareId)
+    print(response)

@@ -10,12 +10,12 @@ def config():
 
 
 @config.command(name="server")
-@click.option('--server', '-s', required=False, help="Server url")
-@click.option('--token', '-t', required=False, help="Account token")
+@click.option('--server', '-s', help="Server url")
+@click.option('--token', '-t', help="Account token")
 def config_variable(server, token):
-    config_info = ConfigManager().read_config()
+    config_info = ConfigManager.read_config()
     if server:
         config_info.server_url = server
     if token:
         config_info.token = token
-    ConfigManager().save_config(config_info)
+    ConfigManager.save_config(config_info)

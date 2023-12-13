@@ -2,6 +2,7 @@ import click
 
 from client import get_api_client
 from commands.base import cli
+from enums.yn import YnType
 
 
 @cli.group()
@@ -9,26 +10,33 @@ def export():
     pass
 
 
-@export.group()
-def project():
+@export.group("project")
+def export_project():
     pass
 
 
-@project.command("bom")
-@click.option('--id', required=True, help="Project ID")
-@click.option('--excel', is_flag=True, show_default=True, help="export with excel")
-@click.option('--json', is_flag=True, show_default=True, default=True, help="export with json")
-def export_project_bom(id, excel, json):
-    print("export project bom")
+@export_project.command("bom")
+@click.option("--prjId", "prjId", required=True, help="project id")
+@click.option("--mergeSaveFlag", "mergeSaveFlag", help="mergeSaveFlag")
+def export_project_bom(prjId, mergeSaveFlag):
+    mergeSaveFlag = YnType(mergeSaveFlag.upper()) if mergeSaveFlag else None
     client = get_api_client()
-    if json:
-        client.export_bom_json(id)
-    else:
-        client.export_bom_excel(id)
+    response = client.export_project_bom(prjId, mergeSaveFlag)
+    print(response)
+
+
+@export_project.command("bomJson")
+@click.option("--prjId", "prjId", required=True, help="project id")
+def export_project_bom_json(prjId):
+    client = get_api_client()
+    response = client.export_project_bom_json(prjId)
+    print(response)
 
 
 @export.command("selfcheck")
-def export_selfcheck(id):
+@click.option("--selfcheckId", "selfcheckId", required=True, help="selfcheck id")
+def export_selfcheck(selfcheckId):
     print("export_selfcheck")
     client = get_api_client()
-    client.export_selfcheck(id)
+    response = client.export_selfcheck(selfcheckId)
+    print(response)
