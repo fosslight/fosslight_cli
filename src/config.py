@@ -3,7 +3,7 @@ import os
 
 from dataclasses import asdict
 
-from dto.config import Config
+from src.dto.config import Config
 
 
 class ConfigManager:

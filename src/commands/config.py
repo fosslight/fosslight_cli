@@ -1,7 +1,7 @@
 import click
 
-from commands.base import cli
-from config import ConfigManager
+from src.commands.base import cli
+from src.config import ConfigManager
 
 
 @cli.group()

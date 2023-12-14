@@ -1,11 +1,11 @@
 import click
 
-from client import get_api_client
-from commands.base import cli
-from enums.distribution_type import DistributionType
-from enums.os_type import OsType
-from enums.priority import Priority
-from enums.yn import YnType
+from src.client import get_api_client
+from src.commands.base import cli
+from src.enums.distribution_type import DistributionType
+from src.enums.os_type import OsType
+from src.enums.priority import Priority
+from src.enums.yn import YnType
 
 
 @cli.group()

@@ -1,7 +1,8 @@
+import glob
 import os
 import uuid
 
-from dto.scanner.scan_result import ScanResult
+from src.dto.scan_result import ScanResult
 from fosslight_scanner.fosslight_scanner import run_main
 
 
@@ -20,4 +21,5 @@ class FosslightScanner:
             url_to_analyze='',
             db_url='',
         )
+        glob.glob(f"{output_path}/*")
         return ScanResult()

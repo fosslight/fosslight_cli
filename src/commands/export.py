@@ -1,8 +1,8 @@
 import click
 
-from client import get_api_client
-from commands.base import cli
-from enums.yn import YnType
+from src.client import get_api_client
+from src.commands.base import cli
+from src.enums.yn import YnType
 
 
 @cli.group()

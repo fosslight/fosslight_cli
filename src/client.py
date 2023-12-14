@@ -3,11 +3,11 @@ from typing import Optional, List, Union
 
 import requests
 
-from config import ConfigManager
-from enums.distribution_type import DistributionType
-from enums.os_type import OsType
-from enums.priority import Priority
-from enums.yn import YnType
+from src.config import ConfigManager
+from src.enums.distribution_type import DistributionType
+from src.enums.os_type import OsType
+from src.enums.priority import Priority
+from src.enums.yn import YnType
 
 
 class ApiClient:
