@@ -9,7 +9,8 @@ from fosslight_scanner.fosslight_scanner import run_main
 class FosslightScanner:
 
     # input: project path
-    def scan_all(self, path: str) -> ScanResult:
+    @classmethod
+    def scan_all(cls, path: str) -> ScanResult:
         uid = uuid.uuid4()
         output_path = os.path.expanduser(f'~/.fosslightcli/temp/scan/{uid}')
         run_main(
@@ -21,5 +22,10 @@ class FosslightScanner:
             url_to_analyze='',
             db_url='',
         )
-        glob.glob(f"{output_path}/*")
-        return ScanResult()
+        result = ScanResult()
+        if bin_files := glob.glob(f"{output_path}/fosslight_binary_bin_*.txt"):
+            result.binary_file_path = bin_files[0]
+
+        if report_files := glob.glob(f"{output_path}/fosslight_report_all_*.xlsx"):
+            result.report_file_path = report_files[0]
+        return result

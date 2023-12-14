@@ -1,13 +1,8 @@
 from dataclasses import dataclass
+from typing import Optional
 
 
 @dataclass
 class ScanResult:
-    binary_file_path: str
-    report_file_path: str
-    lint_file_path: str
-
-    raw_src_file_path: str
-    raw_dep_file_path: str
-    raw_bin_file_path: str
-    raw_lint_file_path: str
+    binary_file_path: Optional[str] = None
+    report_file_path: Optional[str] = None
