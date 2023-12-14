@@ -2,6 +2,6 @@ from .compare import *
 from .config import *
 from .create import *
 from .export import *
-from .search import *
+from .get import *
 from .update import *
-from .upload import *
+from .test import *
