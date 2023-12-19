@@ -150,11 +150,11 @@ class ProjectService:
         if report_file_path or binary_file_path:
             self.update_bin(
                 prjId=prjId,
-                ossReport=read_file(report_file_path) if report_file_path else None,
-                binaryTxt=read_file(binary_file_path) if binary_file_path else None,
+                ossReport=report_file_path,
+                binaryTxt=binary_file_path,
             )
         if report_file_path:
             self.update_src(
                 prjId=prjId,
-                ossReport=read_file(report_file_path),
+                ossReport=report_file_path,
             )
