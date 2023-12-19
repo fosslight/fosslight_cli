@@ -3,7 +3,6 @@ import os
 import uuid
 
 from src.dto.scan_result import ScanResult
-from fosslight_scanner.fosslight_scanner import run_main
 
 
 class FosslightScanner:
@@ -11,6 +10,7 @@ class FosslightScanner:
     # input: project path
     @classmethod
     def scan_all(cls, path: str) -> ScanResult:
+        from fosslight_scanner.fosslight_scanner import run_main
         uid = uuid.uuid4()
         output_path = os.path.expanduser(f'~/.fosslightcli/temp/scan/{uid}')
         run_main(
