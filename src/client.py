@@ -1,13 +1,8 @@
-from dataclasses import asdict
-from typing import Optional, List, Union
+from typing import Optional, List
 
 import requests
 
 from src.config import ConfigManager
-from src.enums.distribution_type import DistributionType
-from src.enums.os_type import OsType
-from src.enums.priority import Priority
-from src.enums.yn import YnType
 
 
 class ApiClient:
@@ -31,13 +26,13 @@ class ApiClient:
     def create_project(
         self,
         prjName: str,
-        osType: Union[OsType, str],
-        distributionType: Union[DistributionType, str],
-        networkServerType: Union[YnType, str],
-        priority: Union[Priority, str],
+        osType: str,
+        distributionType: str,
+        networkServerType: str,
+        priority: str,
         osTypeEtc: Optional[str] = None,
         prjVersion: Optional[str] = None,
-        publicYn: Optional[Union[YnType, str]] = None,
+        publicYn: Optional[str] = None,
         comment: Optional[str] = None,
         userComment: Optional[str] = None,
         watcherEmailList: Optional[List[str]] = None,
@@ -46,13 +41,13 @@ class ApiClient:
     ):
         data = {
             "prjName": prjName,
-            "osType": osType.api_value,
-            "distributionType": distributionType.api_value,
-            "networkServerType": networkServerType.api_value,
-            "priority": priority.api_value,
+            "osType": osType,
+            "distributionType": distributionType,
+            "networkServerType": networkServerType,
+            "priority": priority,
             "osTypeEtc": osTypeEtc,
             "prjVersion": prjVersion,
-            "publicYn": publicYn.api_value if publicYn else None,
+            "publicYn": publicYn,
             "comment": comment,
             "userComment": userComment,
             "watcherEmailList": watcherEmailList,
@@ -62,18 +57,22 @@ class ApiClient:
         return self.post('/api/v2/projects', data=data)
 
     def update_project_watchers(self, prjId, emailList: List[str]):
-        data = {"emailList": emailList}
-        return self.post(f'/api/v2/projects/{prjId}/watchers', data=data)
+        params = {"emailList": emailList}
+        return self.post(f'/api/v2/projects/{prjId}/watchers', params=params)
 
-    def update_project_models(self, prjId, modelListToUpdate: List[str]):
-        data = {"modelListToUpdate": modelListToUpdate}
-        return self.put(f'/api/v2/projects/{prjId}/models', data=data)
+    def update_project_models(self, prjId, modelListToUpdate: str):
+        # modelListToUpdate: "Name1|AV/Car/Security > AV|20201010,Name2|AV/Car/Security > AV|20201010"
+        params = {"modelListToUpdate": modelListToUpdate}
+        return self.put(f'/api/v2/projects/{prjId}/models', params=params)
 
     def update_project_model_file(self, prjId, modelReportFile: bytes):
         files = {
             "modelReport": modelReportFile,
         }
-        return self.put(f'/api/v2/projects/{prjId}/models/upload', files=files)
+        data = {
+            "prjId": prjId
+        }
+        return self.put(f'/api/v2/projects/{prjId}/models/upload', data=data, files=files)
 
     def update_project_bin(
         self,
@@ -81,30 +80,30 @@ class ApiClient:
         ossReport: Optional[bytes] = None,
         binaryTxt: Optional[bytes] = None,
         comment: Optional[str]=None,
-        resetFlag: Optional[YnType] = None,
+        resetFlag: Optional[str] = None,
     ):
         files = {
             "ossReport": ossReport,
             "binaryTxt": binaryTxt,
         }
         data = {
-            "resetFlag": resetFlag.api_value if resetFlag else None,
+            "resetFlag": resetFlag,
             "comment": comment,
         }
         return self.put(f'/api/v2/projects/{prjId}/bin', data=data, files=files)
 
-    def update_project_src(self, prjId: int, ossReport: Optional[bytes] = None, comment: Optional[str] = None, resetFlag: Optional[YnType] = None):
+    def update_project_src(self, prjId: int, ossReport: Optional[bytes] = None, comment: Optional[str] = None, resetFlag: Optional[str] = None):
         files = {"ossReport": ossReport}
         data = {
-            "resetFlag": resetFlag.api_value if resetFlag else None,
+            "resetFlag": resetFlag,
             "comment": comment,
         }
-        return self.put(f'/api/v2/projects/{prjId}/src', data=data, files=files)
+        return self.post(f'/api/v2/projects/{prjId}/src', data=data, files=files)
 
-    def update_project_packages(self, prjId: int, packageFile: bytes, verifyFlag: Optional[YnType] = None):
-        data = {"verifyFlag": verifyFlag.api_value if verifyFlag else None}
+    def update_project_packages(self, prjId: int, packageFile: bytes, verifyFlag: Optional[str] = None):
+        data = {"verifyFlag": verifyFlag}
         files = {"packageFile": packageFile}
-        return self.put(f'/api/v2/projects/{prjId}/packages', files=files, data=data)
+        return self.post(f'/api/v2/projects/{prjId}/packages', files=files, data=data)
 
     def get_projects(
         self,
@@ -127,15 +126,16 @@ class ApiClient:
         }
         return self.get('/api/v2/projects', params=params)
 
-    def get_project_models(self, prjIdList: Optional[int] = None):
+    def get_project_models(self, prjIdList: str):
+        # prjIdList = "10,11"
         params = {"prjIdList": prjIdList}
         return self.get('/api/v2/projects/models', params=params)
 
     def compare_project_bom(self, prjId: int, compareId: int):
         return self.get(f'/api/v2/projects/{prjId}/bom/compare-with/{compareId}')
 
-    def export_project_bom(self, prjId: int, mergeSaveFlag: Optional[YnType] = None):
-        params = {"mergeSaveFlag": mergeSaveFlag.api_value if mergeSaveFlag else None}
+    def export_project_bom(self, prjId: int, mergeSaveFlag: Optional[str] = None):
+        params = {"mergeSaveFlag": mergeSaveFlag}
         return self.get(f'/api/v2/projects/{prjId}/bom/export', params=params)
 
     def export_project_bom_json(self, prjId: int):
@@ -181,7 +181,7 @@ class ApiClient:
             "ossName": ossName,
             "ossVersion": ossVersion
         }
-        return self.get('/api/v2/max-vulnerabilities', params=params)
+        return self.get('/api/v2/max-vulnerability', params=params)
 
     def get_vulnerability(self, cveId: Optional[str] = None, ossName: Optional[str] = None, ossVersion: Optional[str] = None):
         params = {
@@ -191,25 +191,24 @@ class ApiClient:
         }
         return self.get('/api/v2/vulnerabilities', params=params)
 
-    def create_selfcheck(self, prjName: str, prjVersion: Optional[str] = None):
+    def create_self_check(self, prjName: str, prjVersion: Optional[str] = None):
         data = {"prjName": prjName, "prjVersion": prjVersion}
         return self.post('/api/v2/selfchecks', data=data)
 
-    def update_selfcheck_report(self, selfcheckId: int, name: str, ossReport: bytes=None, resetFlag: YnType=None):
+    def update_self_check_report(self, selfCheckId: int, ossReport: bytes=None, resetFlag: str=None):
         files = {}
         if ossReport:
             files['ossReport'] = ossReport
         data = {
-            "name": name,
             "resetFlag": resetFlag
         }
-        return self.put(f'/api/v2/selfchecks/{selfcheckId}/report', files=files, data=data)
+        return self.put(f'/api/v2/selfchecks/{selfCheckId}/report', files=files, data=data)
 
-    def update_selfcheck_watchers(self, selfcheckId: int, emailList: List[str]):
-        return self.put(f'/api/v2/selfchecks/{selfcheckId}/watchers', data={"emailList": emailList})
+    def update_self_check_watchers(self, selfCheckId: int, emailList: List[str]):
+        return self.put(f'/api/v2/selfchecks/{selfCheckId}/watchers', data={"emailList": emailList})
 
-    def export_selfcheck(self, selfcheckId: int):
-        return self.get(f'/api/v2/selfchecks/{selfcheckId}/export')
+    def export_self_check(self, selfCheckId: int):
+        return self.get(f'/api/v2/selfchecks/{selfCheckId}/export')
 
     def get_codes(self, codeType: str, detailValue: str = None):
         params = {"codeType": codeType, "detailValue": detailValue}

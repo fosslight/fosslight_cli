@@ -2,10 +2,7 @@ import click
 
 from src.client import get_api_client
 from src.commands.base import cli
-from src.enums.distribution_type import DistributionType
-from src.enums.os_type import OsType
-from src.enums.priority import Priority
-from src.enums.yn import YnType
+from src.utils.response import check_response
 
 
 @cli.group()
@@ -15,13 +12,13 @@ def create():
 
 @create.command("project")
 @click.option('--prjName', 'prjName', required=True, help="Name of the Project")
-@click.option('--osType', 'osType', required=True, type=click.Choice(OsType.choices(), case_sensitive=False), help="OS type of the Project")
-@click.option('--distributionType', 'distributionType', required=True, type=click.Choice(DistributionType.choices(), case_sensitive=False), help="")
-@click.option('--networkServerType', 'networkServerType', required=True, type=click.Choice(YnType.choices(), case_sensitive=False), help="")
-@click.option('--priority', 'priority', required=True, type=click.Choice(Priority.choices(), case_sensitive=False), help="")
+@click.option('--osType', 'osType', required=True, help="OS type of the Project")
+@click.option('--distributionType', 'distributionType', required=True, help="")
+@click.option('--networkServerType', 'networkServerType', required=True, help="")
+@click.option('--priority', 'priority', required=True, help="")
 @click.option('--osTypeEtc', 'osTypeEtc', help="")
 @click.option('--prjVersion', 'prjVersion', help="")
-@click.option('--publicYn', 'publicYn', type=click.Choice(YnType.choices(), case_sensitive=False), help="")
+@click.option('--publicYn', 'publicYn', help="")
 @click.option('--comment', 'comment', help="")
 @click.option('--userComment', 'userComment', help="")
 @click.option('--watcherEmailList', 'watcherEmailList', help="")
@@ -42,13 +39,6 @@ def create_project(
     modelListToUpdate,
     modelReportFile,
 ):
-    osType = OsType(osType.upper())
-    distributionType = DistributionType(distributionType.upper())
-    networkServerType = YnType(networkServerType.upper())
-    priority = Priority(priority.upper())
-    publicYn = YnType(publicYn.upper()) if publicYn else None
-
-    print("create_project")
     response = get_api_client().create_project(
         prjName=prjName,
         osType=osType,
@@ -64,11 +54,18 @@ def create_project(
         modelListToUpdate=modelListToUpdate,
         modelReportFile=modelReportFile,
     )
-    print(response)
+    check_response(response)
+    prjId = response.json()['prjId']
+    print(prjId)
+    return prjId
 
 
-@create.command("self_check")
-@click.option('--name', '-n', required=True, help="Name of the Project")
-def create_self_check(name):
-    print("create_self_check")
-    get_api_client().create_selfcheck(project_name=name)
+@create.command("selfCheck")
+@click.option('--prjName', 'prjName', required=True, help="Name of the Project")
+@click.option('--prjVersion', 'prjVersion', help="Version of the Project")
+def create_self_check(prjName, prjVersion):
+    response = get_api_client().create_self_check(prjName=prjName, prjVersion=prjVersion)
+    check_response(response)
+    prjId = response.json()["prjId"]
+    print(prjId)
+    return prjId

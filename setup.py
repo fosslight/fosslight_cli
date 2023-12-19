@@ -13,7 +13,7 @@ setup(
     python_requires=">=3.8",
     entry_points={
         'console_scripts': [
-            "fosslight-cli = src.main:main",
+            "fosslight-cli = src.__main__:main",
         ]
     }
 )

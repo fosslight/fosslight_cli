@@ -2,6 +2,8 @@ import click
 
 from src.client import get_api_client
 from src.commands.base import cli
+from src.utils.json import pretty_print_dict
+from src.utils.response import check_response
 
 
 @cli.group()
@@ -9,7 +11,7 @@ def get():
     pass
 
 
-@get.command("project")
+@get.command("projects")
 @click.option("--createDate", "createDate")
 @click.option("--creator", "creator")
 @click.option("--division", "division")
@@ -17,7 +19,7 @@ def get():
 @click.option("--prjIdList", "prjIdList")
 @click.option("--status", "status")
 @click.option("--updateDate", "updateDate")
-def get_project(
+def get_projects(
     createDate,
     creator,
     division,
@@ -36,7 +38,8 @@ def get_project(
         status=status,
         updateDate=updateDate,
     )
-    print(response)
+    check_response(response)
+    pretty_print_dict(response.json())
 
 
 @get.command("projectModels")
@@ -44,15 +47,20 @@ def get_project(
 def get_project_models(prjIdList):
     client = get_api_client()
     response = client.get_project_models(prjIdList=prjIdList)
-    print(response)
+    check_response(response)
+    pretty_print_dict(response.json())
 
 
-@get.command("license")
+@get.command("licenses")
 @click.option("--licenseName", "licenseName", required=True, help="license name")
-def get_license(licenseName):
+def get_licenses(licenseName):
     client = get_api_client()
     response = client.get_licenses(licenseName=licenseName)
-    print(response)
+    if response.status_code == 404:
+        print("Not found")
+        return
+    check_response(response)
+    pretty_print_dict(response.json())
 
 
 @get.command("oss")
@@ -66,17 +74,18 @@ def get_oss(ossName, ossVersion, downloadLocation):
         ossVersion=ossVersion,
         downloadLocation=downloadLocation,
     )
-    print(response)
+    check_response(response)
+    pretty_print_dict(response.json())
 
 
-@get.command("partner")
+@get.command("partners")
 @click.option("--createDate", "createDate")
 @click.option("--creator", "creator")
 @click.option("--division", "division")
 @click.option("--partnerIdList", "partnerIdList")
 @click.option("--status", "status")
 @click.option("--updateDate", "updateDate")
-def get_partner(
+def get_partners(
     createDate,
     creator,
     division,
@@ -93,7 +102,8 @@ def get_partner(
         status=status,
         updateDate=updateDate,
     )
-    print(response)
+    check_response(response)
+    pretty_print_dict(response.json())
 
 
 @get.command("maxVulnerability")
@@ -102,7 +112,8 @@ def get_partner(
 def get_max_vulnerability(ossName, ossVersion):
     client = get_api_client()
     response = client.get_max_vulnerability(ossName=ossName, ossVersion=ossVersion)
-    print(response)
+    check_response(response)
+    pretty_print_dict(response.json())
 
 
 @get.command("vulnerability")
@@ -116,13 +127,15 @@ def get_vulnerability(cveId, ossName, ossVersion):
         ossName=ossName,
         ossVersion=ossVersion,
     )
-    print(response)
+    check_response(response)
+    pretty_print_dict(response.json())
 
 
-@get.command("code")
+@get.command("codes")
 @click.option("--codeType", "codeType", required=True, help="code type")
 @click.option("--detailValue", "detailValue", help="detail value")
-def get_code(codeType, detailValue):
+def get_codes(codeType, detailValue):
     client = get_api_client()
     response = client.get_codes(codeType=codeType, detailValue=detailValue)
-    print(response)
+    check_response(response)
+    pretty_print_dict(response.json())

@@ -19,3 +19,4 @@ def config_variable(server, token):
     if token:
         config_info.token = token
     ConfigManager.save_config(config_info)
+    print("Success: config")
