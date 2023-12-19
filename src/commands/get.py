@@ -29,7 +29,7 @@ def get_projects(
     status,
     updateDate,
 ):
-    data = ProjectService().get_projects(
+    data = ProjectService().get(
         createDate=createDate,
         creator=creator,
         division=division,
