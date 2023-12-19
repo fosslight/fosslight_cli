@@ -1,10 +1,8 @@
 import click
 
-from src.client import get_api_client
 from src.commands.base import cli
-from src.enums import CodeType
-from src.utils.codes import get_code_value
-from src.utils.response import check_response
+from src.services.project import ProjectService
+from src.services.self_check import SelfCheckService
 
 
 @cli.group()
@@ -41,12 +39,12 @@ def create_project(
     modelListToUpdate,
     modelReportFile,
 ):
-    response = get_api_client().create_project(
+    prjId = ProjectService().create(
         prjName=prjName,
-        osType=get_code_value(osType, CodeType.OS_TYPE),
-        distributionType=get_code_value(distributionType, CodeType.DISTRIBUTION_TYPE),
+        osType=osType,
+        distributionType=distributionType,
         networkServerType=networkServerType,
-        priority=get_code_value(priority, CodeType.PRIORITY),
+        priority=priority,
         osTypeEtc=osTypeEtc,
         prjVersion=prjVersion,
         publicYn=publicYn,
@@ -56,8 +54,6 @@ def create_project(
         modelListToUpdate=modelListToUpdate,
         modelReportFile=modelReportFile,
     )
-    check_response(response)
-    prjId = response.json()['prjId']
     print(prjId)
     return prjId
 
@@ -66,8 +62,6 @@ def create_project(
 @click.option('--prjName', 'prjName', required=True, help="Name of the Project")
 @click.option('--prjVersion', 'prjVersion', help="Version of the Project")
 def create_self_check(prjName, prjVersion):
-    response = get_api_client().create_self_check(prjName=prjName, prjVersion=prjVersion)
-    check_response(response)
-    prjId = response.json()["prjId"]
+    prjId = SelfCheckService().create(prjName=prjName, prjVersion=prjVersion)
     print(prjId)
     return prjId

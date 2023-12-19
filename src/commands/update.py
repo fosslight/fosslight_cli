@@ -2,9 +2,8 @@ import click
 
 from src.client import get_api_client
 from src.commands.base import cli
-from src.dto.scan_result import ScanResult
-from src.scanner import FosslightScanner
-from src.utils.file import read_file
+from src.services.project import ProjectService
+from src.services.self_check import SelfCheckService
 from src.utils.response import check_response
 
 
@@ -32,9 +31,7 @@ def update_partners():
 @click.option('--prjId', 'prjId', required=True, help="project id")
 @click.option('--emailList', 'emailList', required=True, help="watcher emailList")
 def update_project_watchers(prjId, emailList):
-    client = get_api_client()
-    response = client.update_project_watchers(prjId=prjId, emailList=emailList)
-    check_response(response)
+    ProjectService().update_watchers(prjId, emailList)
     print("success")
 
 
@@ -42,20 +39,15 @@ def update_project_watchers(prjId, emailList):
 @click.option('--prjId', 'prjId', required=True, help="project id")
 @click.option('--modelListToUpdate', 'modelListToUpdate', required=True)
 def update_project_models(prjId, modelListToUpdate):
-    client = get_api_client()
-    response = client.update_project_models(prjId=prjId, modelListToUpdate=modelListToUpdate)
-    check_response(response)
+    ProjectService().update_model_file(prjId, modelListToUpdate)
     print("Success: Update project model")
 
 
 @update_project.command('modelFile')
 @click.option('--prjId', 'prjId', required=True, help="project id")
-@click.option('--modelReportFile', 'modelReportFile', required=True)
-def update_project_model_file(prjId, modelReportFile):
-    modelReportFile = read_file(modelReportFile)
-    client = get_api_client()
-    response = client.update_project_model_file(prjId=prjId, modelReportFile=modelReportFile)
-    check_response(response)
+@click.option('--modelReport', 'modelReport', required=True)
+def update_project_model_file(prjId, modelReport):
+    ProjectService().update_model_file(prjId, modelReport)
     print("Success: Update project model file")
 
 
@@ -63,32 +55,8 @@ def update_project_model_file(prjId, modelReportFile):
 @click.option('--prjId', 'prjId', required=True, help="project id")
 @click.option('--dir', 'dir', required=True, help="project directory path")
 def update_project_scan(prjId, dir):
-    result: ScanResult = FosslightScanner.scan_all(dir)
-    print("Success: scan directory")
-    client = get_api_client()
-    ossReport = None
-    binaryTxt = None
-    if report_file_path := result.report_file_path:
-        ossReport = read_file(report_file_path)
-    if binary_file_path := result.binary_file_path:
-        binaryTxt = read_file(binary_file_path)
-
-    if binaryTxt:
-        response = client.update_project_bin(
-            prjId=prjId,
-            ossReport=ossReport,
-            binaryTxt=binaryTxt,
-        )
-        check_response(response)
-        print("Success: Upload project bin")
-
-    if ossReport:
-        response = client.update_project_src(
-            prjId=prjId,
-            ossReport=ossReport,
-        )
-        check_response(response)
-        print("Success: Upload project src")
+    ProjectService().scan(prjId, dir)
+    print("Success: scan project")
 
 
 @update_project.command('bin')
@@ -104,19 +72,7 @@ def update_project_bin(
     comment,
     resetFlag,
 ):
-    if ossReport:
-        ossReport = read_file(ossReport)
-    if binaryTxt:
-        binaryTxt = read_file(binaryTxt)
-    client = get_api_client()
-    response = client.update_project_bin(
-        prjId=prjId,
-        ossReport=ossReport,
-        binaryTxt=binaryTxt,
-        comment=comment,
-        resetFlag=resetFlag,
-    )
-    check_response(response)
+    ProjectService().update_bin(prjId, ossReport, binaryTxt, comment, resetFlag)
     print("Success: Upload project bin")
 
 
@@ -131,16 +87,7 @@ def update_project_src(
     comment,
     resetFlag,
 ):
-    if ossReport:
-        ossReport = read_file(ossReport)
-    client = get_api_client()
-    response = client.update_project_src(
-        prjId=prjId,
-        ossReport=ossReport,
-        comment=comment,
-        resetFlag=resetFlag,
-    )
-    check_response(response)
+    ProjectService().update_src(prjId, ossReport, comment, resetFlag)
     print("Success: Upload project src")
 
 
@@ -149,15 +96,7 @@ def update_project_src(
 @click.option('--packageFile', 'packageFile', required=True)
 @click.option('--verifyFlag', 'verifyFlag')
 def update_project_packages(prjId, packageFile, verifyFlag):
-    if packageFile:
-        packageFile = read_file(packageFile)
-    client = get_api_client()
-    response = client.update_project_packages(
-        prjId=prjId,
-        packageFile=packageFile,
-        verifyFlag=verifyFlag,
-    )
-    check_response(response)
+    ProjectService().update_packages(prjId, packageFile, verifyFlag)
     print("Success: Upload project packages")
 
 
@@ -166,15 +105,7 @@ def update_project_packages(prjId, packageFile, verifyFlag):
 @click.option('--ossReport', 'ossReport')
 @click.option('--resetFlag', 'resetFlag')
 def update_self_check_report(selfCheckId, ossReport, resetFlag):
-    if ossReport:
-        ossReport = read_file(ossReport)
-    client = get_api_client()
-    response = client.update_self_check_report(
-        selfCheckId=selfCheckId,
-        ossReport=ossReport,
-        resetFlag=resetFlag,
-    )
-    check_response(response)
+    SelfCheckService().update_report(selfCheckId, ossReport, resetFlag)
     print("Success: Upload self-check report")
 
 
@@ -182,12 +113,7 @@ def update_self_check_report(selfCheckId, ossReport, resetFlag):
 @click.option('--selfCheckId', 'selfCheckId', required=True, help="selfCheck id")
 @click.option('--emailList', 'emailList', required=True)
 def update_self_check_watchers(selfCheckId, emailList):
-    client = get_api_client()
-    response = client.update_selfCheck_watchers(
-        selfCheckId=selfCheckId,
-        emailList=emailList,
-    )
-    check_response(response)
+    SelfCheckService().update_watchers(selfCheckId, emailList)
     print("Success: Update self-check watchers")
 
 
