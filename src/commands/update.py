@@ -2,8 +2,10 @@ import click
 
 from src.client import get_api_client
 from src.commands.base import cli
-from src.enums.yn import YnType
+from src.dto.scan_result import ScanResult
+from src.scanner import FosslightScanner
 from src.utils.file import read_file
+from src.utils.response import check_response
 
 
 @cli.group()
@@ -16,8 +18,8 @@ def update_project():
     pass
 
 
-@update.group("selfcheck")
-def update_selfcheck():
+@update.group("selfCheck")
+def update_self_check():
     pass
 
 
@@ -32,7 +34,8 @@ def update_partners():
 def update_project_watchers(prjId, emailList):
     client = get_api_client()
     response = client.update_project_watchers(prjId=prjId, emailList=emailList)
-    print(response)
+    check_response(response)
+    print("success")
 
 
 @update_project.command('models')
@@ -41,7 +44,8 @@ def update_project_watchers(prjId, emailList):
 def update_project_models(prjId, modelListToUpdate):
     client = get_api_client()
     response = client.update_project_models(prjId=prjId, modelListToUpdate=modelListToUpdate)
-    print(response)
+    check_response(response)
+    print("Success: Update project model")
 
 
 @update_project.command('modelFile')
@@ -51,7 +55,40 @@ def update_project_model_file(prjId, modelReportFile):
     modelReportFile = read_file(modelReportFile)
     client = get_api_client()
     response = client.update_project_model_file(prjId=prjId, modelReportFile=modelReportFile)
-    print(response)
+    check_response(response)
+    print("Success: Update project model file")
+
+
+@update_project.command('scan')
+@click.option('--prjId', 'prjId', required=True, help="project id")
+@click.option('--dir', 'dir', required=True, help="project directory path")
+def update_project_scan(prjId, dir):
+    result: ScanResult = FosslightScanner.scan_all(dir)
+    print("Success: scan directory")
+    client = get_api_client()
+    ossReport = None
+    binaryTxt = None
+    if report_file_path := result.report_file_path:
+        ossReport = read_file(report_file_path)
+    if binary_file_path := result.binary_file_path:
+        binaryTxt = read_file(binary_file_path)
+
+    if binaryTxt:
+        response = client.update_project_bin(
+            prjId=prjId,
+            ossReport=ossReport,
+            binaryTxt=binaryTxt,
+        )
+        check_response(response)
+        print("Success: Upload project bin")
+
+    if ossReport:
+        response = client.update_project_src(
+            prjId=prjId,
+            ossReport=ossReport,
+        )
+        check_response(response)
+        print("Success: Upload project src")
 
 
 @update_project.command('bin')
@@ -71,8 +108,6 @@ def update_project_bin(
         ossReport = read_file(ossReport)
     if binaryTxt:
         binaryTxt = read_file(binaryTxt)
-    if resetFlag:
-        resetFlag = YnType(resetFlag.upper())
     client = get_api_client()
     response = client.update_project_bin(
         prjId=prjId,
@@ -81,7 +116,9 @@ def update_project_bin(
         comment=comment,
         resetFlag=resetFlag,
     )
-    print(response)
+    check_response(response)
+    print("Success: Upload project bin")
+
 
 @update_project.command('src')
 @click.option('--prjId', 'prjId', required=True, help="project id")
@@ -96,8 +133,6 @@ def update_project_src(
 ):
     if ossReport:
         ossReport = read_file(ossReport)
-    if resetFlag:
-        resetFlag = YnType(resetFlag.upper())
     client = get_api_client()
     response = client.update_project_src(
         prjId=prjId,
@@ -105,7 +140,8 @@ def update_project_src(
         comment=comment,
         resetFlag=resetFlag,
     )
-    print(response)
+    check_response(response)
+    print("Success: Upload project src")
 
 
 @update_project.command('packages')
@@ -115,47 +151,44 @@ def update_project_src(
 def update_project_packages(prjId, packageFile, verifyFlag):
     if packageFile:
         packageFile = read_file(packageFile)
-    if verifyFlag:
-        verifyFlag = YnType(verifyFlag.upper())
     client = get_api_client()
     response = client.update_project_packages(
         prjId=prjId,
         packageFile=packageFile,
         verifyFlag=verifyFlag,
     )
-    print(response)
+    check_response(response)
+    print("Success: Upload project packages")
 
 
-@update_project.command('report')
-@click.option('--selfcheckId', 'selfcheckId', required=True, help="selfcheck id")
-@click.option('--name', 'name', required=True)
+@update_self_check.command('report')
+@click.option('--selfCheckId', 'selfCheckId', required=True, help="selfCheck id")
 @click.option('--ossReport', 'ossReport')
 @click.option('--resetFlag', 'resetFlag')
-def update_selfcheck_report(selfcheckId, name, ossReport, resetFlag):
+def update_self_check_report(selfCheckId, ossReport, resetFlag):
     if ossReport:
         ossReport = read_file(ossReport)
-    if resetFlag:
-        resetFlag = YnType(resetFlag.upper())
     client = get_api_client()
-    response = client.update_selfcheck_report(
-        selfcheckId=selfcheckId,
-        name=name,
+    response = client.update_self_check_report(
+        selfCheckId=selfCheckId,
         ossReport=ossReport,
         resetFlag=resetFlag,
     )
-    print(response)
+    check_response(response)
+    print("Success: Upload self-check report")
 
 
-@update_project.command('report')
-@click.option('--selfcheckId', 'selfcheckId', required=True, help="selfcheck id")
+@update_self_check.command('watchers')
+@click.option('--selfCheckId', 'selfCheckId', required=True, help="selfCheck id")
 @click.option('--emailList', 'emailList', required=True)
-def update_selfcheck_watchers(selfcheckId, emailList):
+def update_self_check_watchers(selfCheckId, emailList):
     client = get_api_client()
-    response = client.update_selfcheck_watchers(
-        selfcheckId=selfcheckId,
+    response = client.update_selfCheck_watchers(
+        selfCheckId=selfCheckId,
         emailList=emailList,
     )
-    print(response)
+    check_response(response)
+    print("Success: Update self-check watchers")
 
 
 @update_partners.command('watchers')
@@ -167,4 +200,5 @@ def update_partners_watchers(partnerId, emailList):
         partnersId=partnerId,
         emailList=emailList,
     )
-    print(response)
+    check_response(response)
+    print("Success: Update partners watchers")

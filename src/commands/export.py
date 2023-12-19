@@ -1,8 +1,11 @@
+import datetime
+
 import click
 
 from src.client import get_api_client
 from src.commands.base import cli
-from src.enums.yn import YnType
+from src.utils.json import pretty_print_dict
+from src.utils.response import check_response
 
 
 @cli.group()
@@ -19,10 +22,12 @@ def export_project():
 @click.option("--prjId", "prjId", required=True, help="project id")
 @click.option("--mergeSaveFlag", "mergeSaveFlag", help="mergeSaveFlag")
 def export_project_bom(prjId, mergeSaveFlag):
-    mergeSaveFlag = YnType(mergeSaveFlag.upper()) if mergeSaveFlag else None
     client = get_api_client()
     response = client.export_project_bom(prjId, mergeSaveFlag)
-    print(response)
+    check_response(response)
+    with open(f"bom_{int(datetime.datetime.now().timestamp())}.xlsx", "wb") as f:
+        f.write(response.content)
+    print("Success: Export project bom")
 
 
 @export_project.command("bomJson")
@@ -30,13 +35,16 @@ def export_project_bom(prjId, mergeSaveFlag):
 def export_project_bom_json(prjId):
     client = get_api_client()
     response = client.export_project_bom_json(prjId)
-    print(response)
+    check_response(response)
+    pretty_print_dict(response.json())
 
 
-@export.command("selfcheck")
-@click.option("--selfcheckId", "selfcheckId", required=True, help="selfcheck id")
-def export_selfcheck(selfcheckId):
-    print("export_selfcheck")
+@export.command("selfCheck")
+@click.option("--selfCheckId", "selfCheckId", required=True, help="selfCheck id")
+def export_self_check(selfCheckId):
     client = get_api_client()
-    response = client.export_selfcheck(selfcheckId)
-    print(response)
+    response = client.export_self_check(selfCheckId)
+    check_response(response)
+    with open(f"bom_{int(datetime.datetime.now().timestamp())}.xlsx", "wb") as f:
+        f.write(response.content)
+    print("Success: Export self-check")
