@@ -3,6 +3,7 @@ from typing import Optional, List
 import requests
 
 from src.config import ConfigManager
+from src.enums import CodeType
 
 
 class ApiClient:
@@ -210,7 +211,7 @@ class ApiClient:
     def export_self_check(self, selfCheckId: int):
         return self.get(f'/api/v2/selfchecks/{selfCheckId}/export')
 
-    def get_codes(self, codeType: str, detailValue: str = None):
+    def get_codes(self, codeType: CodeType, detailValue: str = None):
         params = {"codeType": codeType, "detailValue": detailValue}
         return self.get('/api/v2/codes', params=params)
 

@@ -2,6 +2,8 @@ import click
 
 from src.client import get_api_client
 from src.commands.base import cli
+from src.enums import CodeType
+from src.utils.codes import get_code_value
 from src.utils.response import check_response
 
 
@@ -41,10 +43,10 @@ def create_project(
 ):
     response = get_api_client().create_project(
         prjName=prjName,
-        osType=osType,
-        distributionType=distributionType,
+        osType=get_code_value(osType, CodeType.OS_TYPE),
+        distributionType=get_code_value(distributionType, CodeType.DISTRIBUTION_TYPE),
         networkServerType=networkServerType,
-        priority=priority,
+        priority=get_code_value(priority, CodeType.PRIORITY),
         osTypeEtc=osTypeEtc,
         prjVersion=prjVersion,
         publicYn=publicYn,
