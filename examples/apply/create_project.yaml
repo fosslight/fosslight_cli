@@ -1,0 +1,16 @@
+kind: createProject
+parameters:
+  prjName: testprj
+  prjVersion: ${PRJ_VERSION}
+  osType: Linux
+  distributionType: "General Model"
+  networkServerType: N
+  priority: P1
+update:
+  models:
+    modelListToUpdate: "ASDF|AV/Car/Security > AV|20201010"
+  modelFile:
+    modelReport: "../data/ModelList.xlsx"
+  watchers:
+scan:
+  dir: "../data/simpleProject"
