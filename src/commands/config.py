@@ -18,5 +18,5 @@ def config_variable(server, token):
         config_info.server_url = server
     if token:
         config_info.token = token
-    ConfigManager.save_config(config_info)
+    ConfigManager.save_config(server_url=config_info.server_url, token=config_info.token)
     print("Success: config")

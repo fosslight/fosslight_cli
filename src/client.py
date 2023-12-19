@@ -66,9 +66,9 @@ class ApiClient:
         params = {"modelListToUpdate": modelListToUpdate}
         return self.put(f'/api/v2/projects/{prjId}/models', params=params)
 
-    def update_project_model_file(self, prjId, modelReportFile: bytes):
+    def update_project_model_file(self, prjId, modelReport: bytes):
         files = {
-            "modelReport": modelReportFile,
+            "modelReport": modelReport,
         }
         data = {
             "prjId": prjId

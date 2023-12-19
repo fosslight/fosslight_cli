@@ -10,7 +10,8 @@ class ConfigManager:
     file_path = os.path.expanduser('~/.fosslight/config.json')
 
     @classmethod
-    def save_config(cls, config: Config):
+    def save_config(cls, server_url: str = None, token: str = None):
+        config = Config(server_url=server_url, token=token)
         dir_path = os.path.dirname(cls.file_path)
         if not os.path.exists(dir_path):
             os.makedirs(dir_path)

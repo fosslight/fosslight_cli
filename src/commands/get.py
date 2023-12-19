@@ -2,6 +2,7 @@ import click
 
 from src.client import get_api_client
 from src.commands.base import cli
+from src.services.project import ProjectService
 from src.utils.json import pretty_print_dict
 from src.utils.response import check_response
 
@@ -28,8 +29,7 @@ def get_projects(
     status,
     updateDate,
 ):
-    client = get_api_client()
-    response = client.get_projects(
+    data = ProjectService().get_projects(
         createDate=createDate,
         creator=creator,
         division=division,
@@ -38,17 +38,14 @@ def get_projects(
         status=status,
         updateDate=updateDate,
     )
-    check_response(response)
-    pretty_print_dict(response.json())
+    pretty_print_dict(data)
 
 
 @get.command("projectModels")
 @click.option("--prjIdList", "prjIdList")
 def get_project_models(prjIdList):
-    client = get_api_client()
-    response = client.get_project_models(prjIdList=prjIdList)
-    check_response(response)
-    pretty_print_dict(response.json())
+    data = ProjectService().get_models(prjIdList)
+    pretty_print_dict(data)
 
 
 @get.command("licenses")
