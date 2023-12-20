@@ -1,4 +1,5 @@
 import click
+from src.config import ConfigManager
 
 from src.client import get_api_client
 from src.commands.base import cli
@@ -25,6 +26,19 @@ def update_self_check():
 @update.group("partners")
 def update_partners():
     pass
+
+
+@update.command('config')
+@click.option('--server', '-s', help="Server url")
+@click.option('--token', '-t', help="Account token")
+def update_config(server, token):
+    config_info = ConfigManager.read_config()
+    if server:
+        config_info.server_url = server
+    if token:
+        config_info.token = token
+    ConfigManager.save_config(server_url=config_info.server_url, token=config_info.token)
+    print("Success: Update config")
 
 
 @update_project.command('watchers')
