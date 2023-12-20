@@ -7,7 +7,7 @@ from src.dto.config import Config
 
 
 class ConfigManager:
-    file_path = os.path.expanduser('~/.fosslight/config.json')
+    file_path = os.path.expanduser('~/.fosslightcli/config.json')
 
     @classmethod
     def save_config(cls, server_url: str = None, token: str = None):

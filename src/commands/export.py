@@ -21,9 +21,13 @@ def export_project():
 @export_project.command("bom")
 @click.option("--prjId", "prjId", required=True, help="project id")
 @click.option("--mergeSaveFlag", "mergeSaveFlag", help="mergeSaveFlag")
-def export_project_bom(prjId, mergeSaveFlag):
+@click.option("--output", "-o", "output", help="output file path")
+def export_project_bom(prjId, mergeSaveFlag, output):
     response = ProjectService().export_bom(prjId, mergeSaveFlag)
-    with open(f"bom_{int(datetime.datetime.now().timestamp())}.xlsx", "wb") as f:
+    path = output if output else f"bom_{int(datetime.datetime.now().timestamp())}.xlsx"
+    if not path.endswith(".xlsx"):
+        path += ".xlsx"
+    with open(path, "wb") as f:
         f.write(response.content)
     print("Success: Export project bom")
 

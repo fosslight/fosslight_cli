@@ -1,3 +1,5 @@
+import datetime
+
 import click
 
 from src.client import get_api_client
@@ -136,3 +138,17 @@ def get_codes(codeType, detailValue):
     response = client.get_codes(codeType=codeType, detailValue=detailValue)
     check_response(response)
     pretty_print_dict(response.json())
+
+
+@get.command("notice")
+@click.option("--prjId", "prjId", required=True, help="project id")
+@click.option("--output", "-o", "output", help="output file path")
+def get_notice(prjId, output):
+    response = ProjectService().get_notice(prjId)
+    path = output if output else f"notice_{int(datetime.datetime.now().timestamp())}.html"
+
+    if not path.endswith(".html"):
+        path += ".html"
+    with open(path, "w") as f:
+        f.write(response.text)
+    print(f"Success: {path} created")

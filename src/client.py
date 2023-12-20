@@ -70,10 +70,7 @@ class ApiClient:
         files = {
             "modelReport": modelReport,
         }
-        data = {
-            "prjId": prjId
-        }
-        return self.put(f'/api/v2/projects/{prjId}/models/upload', data=data, files=files)
+        return self.put(f'/api/v2/projects/{prjId}/models/upload', files=files)
 
     def update_project_bin(
         self,
@@ -214,6 +211,9 @@ class ApiClient:
     def get_codes(self, codeType: CodeType, detailValue: str = None):
         params = {"codeType": codeType, "detailValue": detailValue}
         return self.get('/api/v2/codes', params=params)
+
+    def get_project_notice(self, prjId: str):
+        return self.get(f'/api/v2/projects/{prjId}/notice')
 
 
 def get_api_client():
