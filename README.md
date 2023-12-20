@@ -1,11 +1,22 @@
-# cli guide
+# FOSSLIGHT CLI
 
-# 구문
+FOSSLIGHT Hub 서버에 간편하게 요청을 보낼 수 있는 도구입니다.<br>
+프로젝트 생성, 수정, 분석, 분석파일 업로드, bom export 등 다양하게 활용할 수 있습니다.
+
+# 📋 Prerequisite
+Python 3.8+
+
+# 🎉 How to install
+```
+$ pip3 install fosslight_cli
+```
+
+# How to Run
 
 터미널 창에서 fosslight-cli 명령을 실행하려면 다음의 구문을 사용한다.
 
 ```
-fosslight-cli [command] [resource name] ([sub-resource name]) [parameters ...]
+$ fosslight-cli [command] [resource name] ([sub-resource name]) [parameters ...]
 ```
 
 - **command**: 수행하려는 동작을 지정한다.
@@ -30,9 +41,9 @@ fosslight-cli [command] [resource name] ([sub-resource name]) [parameters ...]
     - ex.
         
         ```
-        fosslight-cli get project list
-        fosslight-cli update project bin
-        fosslight-cli get project models
+        $ fosslight-cli get project list
+        $ fosslight-cli update project bin
+        $ fosslight-cli get project models
         ```
 - **parameters**: 입력 파라미터 목록. 필수 파라미터와 선택 파라미터를 입력할 수 있다.
 
