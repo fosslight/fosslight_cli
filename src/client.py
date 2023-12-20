@@ -70,10 +70,7 @@ class ApiClient:
         files = {
             "modelReport": modelReport,
         }
-        data = {
-            "prjId": prjId
-        }
-        return self.put(f'/api/v2/projects/{prjId}/models/upload', data=data, files=files)
+        return self.put(f'/api/v2/projects/{prjId}/models/upload', files=files)
 
     def update_project_bin(
         self,
