@@ -7,7 +7,7 @@ with open('requirements.txt', 'r') as f:
 
 setup(
     name='fosslight_cli',
-    version='0.0.1',
+    version='0.0.1a',
     packages=find_packages(),
     install_requires=required,
     python_requires=">=3.8",
