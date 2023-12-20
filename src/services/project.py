@@ -71,7 +71,7 @@ class ProjectService:
         updateDate=None,
     ) -> dict:
         client = get_api_client()
-        response = client.get_projects(
+        response = client.get_project_list(
             createDate=createDate,
             creator=creator,
             division=division,
@@ -133,8 +133,8 @@ class ProjectService:
         )
         check_response(response)
 
-    def update_packages(self, prjId, packageFile, verifyFlag=None):
-        response = get_api_client().update_project_packages(
+    def update_package(self, prjId, packageFile, verifyFlag=None):
+        response = get_api_client().update_project_package(
             prjId=prjId,
             packageFile=read_file(packageFile) if packageFile else None,
             verifyFlag=verifyFlag,
@@ -159,8 +159,8 @@ class ProjectService:
                 ossReport=report_file_path,
             )
 
-    def get_notice(self, prjId):
+    def export_notice(self, prjId):
         # get notice html file
-        response = get_api_client().get_project_notice(prjId=prjId)
+        response = get_api_client().export_project_notice(prjId=prjId)
         check_response(response)
         return response

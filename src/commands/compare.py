@@ -10,7 +10,13 @@ def compare():
     pass
 
 
-@compare.command(name="projectBom")
+@compare.group("project")
+def compare_project():
+    pass
+
+
+# project
+@compare_project.command(name="bom")
 @click.option('--prjId', 'prjId', required=True)
 @click.option('--compareId', 'compareId', required=True)
 def compare_project_bom(prjId, compareId):

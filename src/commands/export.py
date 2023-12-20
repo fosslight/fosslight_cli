@@ -39,6 +39,20 @@ def export_project_bom_json(prjId):
     pretty_print_dict(data)
 
 
+@export_project.command("notice")
+@click.option("--prjId", "prjId", required=True, help="project id")
+@click.option("--output", "-o", "output", help="output file path")
+def export_project_notice(prjId, output):
+    response = ProjectService().export_notice(prjId)
+    path = output if output else f"notice_{int(datetime.datetime.now().timestamp())}.html"
+
+    if not path.endswith(".html"):
+        path += ".html"
+    with open(path, "w") as f:
+        f.write(response.text)
+    print(f"Success: {path} created")
+
+
 @export.command("selfCheck")
 @click.option("--selfCheckId", "selfCheckId", required=True, help="selfCheck id")
 def export_self_check(selfCheckId):

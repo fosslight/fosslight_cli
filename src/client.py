@@ -98,12 +98,12 @@ class ApiClient:
         }
         return self.post(f'/api/v2/projects/{prjId}/src', data=data, files=files)
 
-    def update_project_packages(self, prjId: int, packageFile: bytes, verifyFlag: Optional[str] = None):
+    def update_project_package(self, prjId: int, packageFile: bytes, verifyFlag: Optional[str] = None):
         data = {"verifyFlag": verifyFlag}
         files = {"packageFile": packageFile}
         return self.post(f'/api/v2/projects/{prjId}/packages', files=files, data=data)
 
-    def get_projects(
+    def get_project_list(
         self,
         createDate: Optional[str] = None,
         creator: Optional[str] = None,
@@ -139,7 +139,10 @@ class ApiClient:
     def export_project_bom_json(self, prjId: int):
         return self.get(f'/api/v2/projects/{prjId}/bom/json')
 
-    def get_licenses(self, licenseName: str):
+    def export_project_notice(self, prjId: str):
+        return self.get(f'/api/v2/projects/{prjId}/notice')
+
+    def get_license_list(self, licenseName: str):
         data = {"licenseName": licenseName}
         return self.get('/api/v2/licenses', params=data)
 
@@ -151,7 +154,7 @@ class ApiClient:
         }
         return self.get('/api/v2/oss', params=params)
 
-    def get_partners(
+    def get_partner_list(
         self,
         createDate: Optional[str] = None,
         creator: Optional[str] = None,
@@ -170,7 +173,7 @@ class ApiClient:
         }
         return self.get('/api/v2/partners', params=params)
 
-    def update_partners_watchers(self, partnerId: int, emailList: List[str]):
+    def update_partner_watchers(self, partnerId: int, emailList: List[str]):
         data = {"emailList": emailList}
         return self.put(f"/api/v2/partners/{partnerId}/watchers", data=data)
 
@@ -208,12 +211,9 @@ class ApiClient:
     def export_self_check(self, selfCheckId: int):
         return self.get(f'/api/v2/selfchecks/{selfCheckId}/export')
 
-    def get_codes(self, codeType: CodeType, detailValue: str = None):
+    def get_code(self, codeType: CodeType, detailValue: str = None):
         params = {"codeType": codeType, "detailValue": detailValue}
         return self.get('/api/v2/codes', params=params)
-
-    def get_project_notice(self, prjId: str):
-        return self.get(f'/api/v2/projects/{prjId}/notice')
 
 
 def get_api_client():
