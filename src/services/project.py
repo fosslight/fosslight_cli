@@ -158,3 +158,9 @@ class ProjectService:
                 prjId=prjId,
                 ossReport=report_file_path,
             )
+
+    def get_notice(self, prjId):
+        # get notice html file
+        response = get_api_client().get_project_notice(prjId=prjId)
+        check_response(response)
+        return response

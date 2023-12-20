@@ -212,6 +212,9 @@ class ApiClient:
         params = {"codeType": codeType, "detailValue": detailValue}
         return self.get('/api/v2/codes', params=params)
 
+    def get_project_notice(self, prjId: str):
+        return self.get(f'/api/v2/projects/{prjId}/notice')
+
 
 def get_api_client():
     config = ConfigManager.read_config()
