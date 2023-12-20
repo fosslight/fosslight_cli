@@ -4,6 +4,7 @@ from src.config import ConfigManager
 from src.client import get_api_client
 from src.commands.base import cli
 from src.services.project import ProjectService
+from src.utils.display import display_text
 from src.utils.json import pretty_print_dict
 from src.utils.response import check_response
 
@@ -37,8 +38,8 @@ def get_partner():
 @get.command("config")
 def get_config():
     config_info = ConfigManager.read_config()
-    print(f"- Server: {config_info.server_url}")
-    print(f"- Token: {config_info.token}")
+    display_text(f"- Server: {config_info.server_url}")
+    display_text(f"- Token: {config_info.token}")
 
 
 # project
@@ -85,7 +86,7 @@ def get_license_list(licenseName):
     client = get_api_client()
     response = client.get_license_list(licenseName=licenseName)
     if response.status_code == 404:
-        print("Not found")
+        display_text("Not found")
         return
     check_response(response)
     pretty_print_dict(response.json())
