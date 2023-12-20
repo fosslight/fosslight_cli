@@ -1,5 +1,4 @@
 import click
-import yaml
 
 from src.apply.create_project import create_project
 from src.commands.base import cli

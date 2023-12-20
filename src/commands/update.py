@@ -23,8 +23,8 @@ def update_self_check():
     pass
 
 
-@update.group("partners")
-def update_partners():
+@update.group("partner")
+def update_partner():
     pass
 
 
@@ -53,7 +53,7 @@ def update_project_watchers(prjId, emailList):
 @click.option('--prjId', 'prjId', required=True, help="project id")
 @click.option('--modelListToUpdate', 'modelListToUpdate', required=True)
 def update_project_models(prjId, modelListToUpdate):
-    ProjectService().update_model_file(prjId, modelListToUpdate)
+    ProjectService().update_models(prjId, modelListToUpdate)
     print("Success: Update project model")
 
 
@@ -105,13 +105,13 @@ def update_project_src(
     print("Success: Upload project src")
 
 
-@update_project.command('packages')
+@update_project.command('package')
 @click.option('--prjId', 'prjId', required=True, help="project id")
 @click.option('--packageFile', 'packageFile', required=True)
 @click.option('--verifyFlag', 'verifyFlag')
-def update_project_packages(prjId, packageFile, verifyFlag):
-    ProjectService().update_packages(prjId, packageFile, verifyFlag)
-    print("Success: Upload project packages")
+def update_project_package(prjId, packageFile, verifyFlag):
+    ProjectService().update_package(prjId, packageFile, verifyFlag)
+    print("Success: Upload project package")
 
 
 @update_self_check.command('report')
@@ -131,12 +131,12 @@ def update_self_check_watchers(selfCheckId, emailList):
     print("Success: Update self-check watchers")
 
 
-@update_partners.command('watchers')
+@update_partner.command('watchers')
 @click.option('--partnerId', 'partnerId', required=True, help="partner id")
 @click.option('--emailList', 'emailList', required=True)
-def update_partners_watchers(partnerId, emailList):
+def update_partner_watchers(partnerId, emailList):
     client = get_api_client()
-    response = client.update_partners_watchers(
+    response = client.update_partner_watchers(
         partnersId=partnerId,
         emailList=emailList,
     )
