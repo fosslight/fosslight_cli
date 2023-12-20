@@ -22,5 +22,4 @@ def read_yaml(file_path):
 
     with open(file_path) as f:
         data = yaml.load(f, Loader=EnvVarLoader)
-    print(data)
     return data
