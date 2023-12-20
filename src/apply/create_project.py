@@ -1,6 +1,7 @@
 from typing import List
 
 from src.services.project import ProjectService
+from src.utils.display import display_text
 
 
 def create_project(data: dict):
@@ -28,7 +29,7 @@ def create_project(data: dict):
 
     # create
     prjId = service.create(**data["parameters"])
-    print(f"Project created ({prjId})")
+    display_text(f"Project created ({prjId})")
 
     # update
     if update := data["update"]:
@@ -38,11 +39,12 @@ def create_project(data: dict):
             service.update_model_file(prjId=prjId, modelReport=model_file["modelReport"])
         if watchers := update.get("watchers"):
             service.update_watchers(prjId=prjId, emailList=watchers["emailList"])
-        print(f"Project updated")
+        display_text(f"Project updated")
 
     # scan
-    if scan := data["scan"]:
+    if scan := data.get("scan"):
         service.scan(prjId=prjId, dir=scan["dir"])
+    return prjId
 
 
 def _has_key(data: dict, key_list: List[str]):

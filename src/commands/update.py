@@ -5,6 +5,7 @@ from src.client import get_api_client
 from src.commands.base import cli
 from src.services.project import ProjectService
 from src.services.self_check import SelfCheckService
+from src.utils.display import display_text
 from src.utils.response import check_response
 
 
@@ -38,7 +39,7 @@ def update_config(server, token):
     if token:
         config_info.token = token
     ConfigManager.save_config(server_url=config_info.server_url, token=config_info.token)
-    print("Success: Update config")
+    display_text("Success: Update config")
 
 
 @update_project.command('watchers')
@@ -46,7 +47,7 @@ def update_config(server, token):
 @click.option('--emailList', 'emailList', required=True, help="watcher emailList")
 def update_project_watchers(prjId, emailList):
     ProjectService().update_watchers(prjId, emailList)
-    print("success")
+    display_text("success")
 
 
 @update_project.command('models')
@@ -54,7 +55,7 @@ def update_project_watchers(prjId, emailList):
 @click.option('--modelListToUpdate', 'modelListToUpdate', required=True)
 def update_project_models(prjId, modelListToUpdate):
     ProjectService().update_models(prjId, modelListToUpdate)
-    print("Success: Update project model")
+    display_text("Success: Update project model")
 
 
 @update_project.command('modelFile')
@@ -62,7 +63,7 @@ def update_project_models(prjId, modelListToUpdate):
 @click.option('--modelReport', 'modelReport', required=True)
 def update_project_model_file(prjId, modelReport):
     ProjectService().update_model_file(prjId, modelReport)
-    print("Success: Update project model file")
+    display_text("Success: Update project model file")
 
 
 @update_project.command('scan')
@@ -70,7 +71,7 @@ def update_project_model_file(prjId, modelReport):
 @click.option('--dir', 'dir', required=True, help="project directory path")
 def update_project_scan(prjId, dir):
     ProjectService().scan(prjId, dir)
-    print("Success: scan project")
+    display_text("Success: scan project")
 
 
 @update_project.command('bin')
@@ -87,7 +88,7 @@ def update_project_bin(
     resetFlag,
 ):
     ProjectService().update_bin(prjId, ossReport, binaryTxt, comment, resetFlag)
-    print("Success: Upload project bin")
+    display_text("Success: Upload project bin")
 
 
 @update_project.command('src')
@@ -102,7 +103,7 @@ def update_project_src(
     resetFlag,
 ):
     ProjectService().update_src(prjId, ossReport, comment, resetFlag)
-    print("Success: Upload project src")
+    display_text("Success: Upload project src")
 
 
 @update_project.command('package')
@@ -111,7 +112,7 @@ def update_project_src(
 @click.option('--verifyFlag', 'verifyFlag')
 def update_project_package(prjId, packageFile, verifyFlag):
     ProjectService().update_package(prjId, packageFile, verifyFlag)
-    print("Success: Upload project package")
+    display_text("Success: Upload project package")
 
 
 @update_self_check.command('report')
@@ -120,7 +121,7 @@ def update_project_package(prjId, packageFile, verifyFlag):
 @click.option('--resetFlag', 'resetFlag')
 def update_self_check_report(selfCheckId, ossReport, resetFlag):
     SelfCheckService().update_report(selfCheckId, ossReport, resetFlag)
-    print("Success: Upload self-check report")
+    display_text("Success: Upload self-check report")
 
 
 @update_self_check.command('watchers')
@@ -128,7 +129,7 @@ def update_self_check_report(selfCheckId, ossReport, resetFlag):
 @click.option('--emailList', 'emailList', required=True)
 def update_self_check_watchers(selfCheckId, emailList):
     SelfCheckService().update_watchers(selfCheckId, emailList)
-    print("Success: Update self-check watchers")
+    display_text("Success: Update self-check watchers")
 
 
 @update_partner.command('watchers')
@@ -141,4 +142,4 @@ def update_partner_watchers(partnerId, emailList):
         emailList=emailList,
     )
     check_response(response)
-    print("Success: Update partners watchers")
+    display_text("Success: Update partners watchers")

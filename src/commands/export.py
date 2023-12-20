@@ -5,6 +5,7 @@ import click
 from src.commands.base import cli
 from src.services.project import ProjectService
 from src.services.self_check import SelfCheckService
+from src.utils.display import display_text
 from src.utils.json import pretty_print_dict
 
 
@@ -29,7 +30,7 @@ def export_project_bom(prjId, mergeSaveFlag, output):
         path += ".xlsx"
     with open(path, "wb") as f:
         f.write(response.content)
-    print("Success: Export project bom")
+    display_text("Success: Export project bom")
 
 
 @export_project.command("bomJson")
@@ -50,7 +51,7 @@ def export_project_notice(prjId, output):
         path += ".html"
     with open(path, "w") as f:
         f.write(response.text)
-    print(f"Success: {path} created")
+    display_text(f"Success: {path} created")
 
 
 @export.command("selfCheck")
@@ -59,4 +60,4 @@ def export_self_check(selfCheckId):
     response = SelfCheckService().export(selfCheckId)
     with open(f"bom_{int(datetime.datetime.now().timestamp())}.xlsx", "wb") as f:
         f.write(response.content)
-    print("Success: Export self-check")
+    display_text("Success: Export self-check")

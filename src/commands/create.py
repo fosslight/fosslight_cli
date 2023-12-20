@@ -3,6 +3,7 @@ import click
 from src.commands.base import cli
 from src.services.project import ProjectService
 from src.services.self_check import SelfCheckService
+from src.utils.output import set_output_result
 
 
 @cli.group()
@@ -54,8 +55,7 @@ def create_project(
         modelListToUpdate=modelListToUpdate,
         modelReportFile=modelReportFile,
     )
-    print(prjId)
-    return prjId
+    set_output_result(prjId)
 
 
 @create.command("selfCheck")
@@ -63,5 +63,4 @@ def create_project(
 @click.option('--prjVersion', 'prjVersion', help="Version of the Project")
 def create_self_check(prjName, prjVersion):
     prjId = SelfCheckService().create(prjName=prjName, prjVersion=prjVersion)
-    print(prjId)
-    return prjId
+    set_output_result(prjId)
