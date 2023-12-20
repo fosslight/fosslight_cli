@@ -7,9 +7,14 @@ from src.enums.apply import Kind
 from src.utils.yaml import read_yaml
 
 
-@cli.command("apply")
+@cli.group("apply")
+def apply():
+    pass
+
+
+@apply.command("yaml")
 @click.option('--file', '-f', 'file', required=True, help="yaml file path")
-def apply(file):
+def apply_yaml(file):
     data = read_yaml(file)
     kind = data['kind']
     assert kind in Kind.choices, f"invalid kind - available kinds: {', '.join(Kind.choices)}"
