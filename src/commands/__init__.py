@@ -1,6 +1,5 @@
 from .apply import *
 from .compare import *
-from .config import *
 from .create import *
 from .export import *
 from .get import *

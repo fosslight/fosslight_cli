@@ -1,6 +1,7 @@
 import datetime
 
 import click
+from src.config import ConfigManager
 
 from src.client import get_api_client
 from src.commands.base import cli
@@ -12,6 +13,13 @@ from src.utils.response import check_response
 @cli.group()
 def get():
     pass
+
+
+@get.command("config")
+def get_config():
+    config_info = ConfigManager.read_config()
+    print(f"- Server: {config_info.server_url}")
+    print(f"- Token: {config_info.token}")
 
 
 @get.command("projects")
