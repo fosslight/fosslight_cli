@@ -116,3 +116,70 @@ ex.
     ```
     
     - 프로젝트를 생성하고, model 정보를 업데이트한 뒤 프로젝트 디렉토리를 scan한 결과를 업로드한다.
+
+
+# Examples
+
+## Config
+
+- 서버, 토큰 설정
+    
+    ```
+    $ fosslight-cli update config --server http://127.0.0.1:8180 --token xxxx
+    ```
+    
+
+- 설정된 서버, 토큰 확인
+    
+    ```
+    $ fosslight-cli get config
+    ```
+    
+
+## Project
+
+- 프로젝트 생성
+    
+    ```
+    $fosslight-cli create project \
+    	--prjName test_project \
+    	--osType Linux \
+    	--distributionType 'General Model' \
+    	--networkServerType N \
+    	--priority P1
+    ```
+    
+    *osType 같은 코드 값은 100 200 등의 코드 값을 입력하거나, Linux linux LINUX 등 display 값을 입력할 수 있음
+    
+
+- 모델 입력
+    
+    ```
+    $fosslight-cli update project models \
+    	--prjId 1 \
+    	--modelListToUpdate "ASDF|AV/Car/Security > AV|20201010"
+    ```
+    
+
+- bin 업로드
+    
+    ```
+    $fosslight-cli update project bin \
+    	--prjId 1 \
+    	--binaryTxt /path/to/file/fosslight_binary_bin_231214_1020.txt \
+    	--ossReport /path/to/file/fosslight_report_231219_prj-10.xlsx
+    ```
+    
+
+- Scanner 실행 & 결과 업로드
+    
+    ```
+    $fosslight-cli update project scan --prjId 1 --dir /path/to/project/
+    ```
+    
+
+- 프로젝트 목록 가져오기
+    
+    ```
+    $fosslight-cli get project list
+    ```
