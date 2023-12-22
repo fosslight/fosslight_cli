@@ -1,4 +1,5 @@
 class Kind:
+    EXECUTE_COMMAND = 'executeCommand'
     CREATE_PROJECT = 'createProject'
 
-    choices = [CREATE_PROJECT]
+    choices = [EXECUTE_COMMAND, CREATE_PROJECT]
