@@ -182,7 +182,7 @@ class ApiClient:
             "ossName": ossName,
             "ossVersion": ossVersion
         }
-        return self.get('/api/v2/max-vulnerability', params=params)
+        return self.get('/api/v2/max-vulnerabilities', params=params)
 
     def get_vulnerability(self, cveId: Optional[str] = None, ossName: Optional[str] = None, ossVersion: Optional[str] = None):
         params = {
