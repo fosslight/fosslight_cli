@@ -1,4 +1,7 @@
 from requests import Response
+from src.scanner import FosslightScanner
+
+from src.dto.scan_result import ScanResult
 
 from src.client import get_api_client
 from src.utils.file import read_file
@@ -32,3 +35,14 @@ class SelfCheckService:
             emailList=emailList,
         )
         check_response(response)
+
+    # scan and upload bin, src files
+    def scan(self, selfCheckId, dir):
+        result: ScanResult = FosslightScanner.scan_all(dir)
+        report_file_path = result.report_file_path
+
+        if report_file_path:
+            self.update_report(
+                selfCheckId=selfCheckId,
+                ossReport=report_file_path,
+            )
