@@ -8,7 +8,7 @@ with open('requirements.txt', 'r') as f:
 if __name__ == '__main__':
     setup(
         name='fosslight_cli',
-        version='0.0.4',
+        version='0.0.5',
         packages=find_packages(),
         install_requires=required,
         python_requires=">=3.8",
