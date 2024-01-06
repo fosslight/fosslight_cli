@@ -3,6 +3,7 @@ from src.config import ConfigManager
 
 from src.client import get_api_client
 from src.commands.base import cli
+from src.enums.reset_flag import ResetFlag
 from src.services.project import ProjectService
 from src.services.self_check import SelfCheckService
 from src.utils.display import display_text
@@ -79,7 +80,7 @@ def update_project_scan(prjId, dir):
 @click.option('--ossReport', 'ossReport')
 @click.option('--binaryTxt', 'binaryTxt')
 @click.option('--comment', 'comment')
-@click.option('--resetFlag', 'resetFlag')
+@click.option('--resetFlag', 'resetFlag', type=click.Choice(ResetFlag.choices))
 def update_project_bin(
     prjId,
     ossReport,
@@ -95,7 +96,7 @@ def update_project_bin(
 @click.option('--prjId', 'prjId', required=True, help="project id")
 @click.option('--ossReport', 'ossReport')
 @click.option('--comment', 'comment')
-@click.option('--resetFlag', 'resetFlag')
+@click.option('--resetFlag', 'resetFlag', type=click.Choice(ResetFlag.choices))
 def update_project_src(
     prjId,
     ossReport,
@@ -118,7 +119,7 @@ def update_project_package(prjId, packageFile, verifyFlag):
 @update_self_check.command('report')
 @click.option('--selfCheckId', 'selfCheckId', required=True, help="selfCheck id")
 @click.option('--ossReport', 'ossReport')
-@click.option('--resetFlag', 'resetFlag')
+@click.option('--resetFlag', 'resetFlag', type=click.Choice(ResetFlag.choices))
 def update_self_check_report(selfCheckId, ossReport, resetFlag):
     SelfCheckService().update_report(selfCheckId, ossReport, resetFlag)
     display_text("Success: Upload self-check report")

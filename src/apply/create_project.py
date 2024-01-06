@@ -1,6 +1,5 @@
-from typing import List
-
 from src.services.project import ProjectService
+from src.utils.apply import has_key
 from src.utils.display import display_text
 
 
@@ -22,10 +21,10 @@ def create_project(data: dict):
     for field in required:
         keys = field.split(".")
         if len(keys) == 1:
-            assert _has_key(data, keys), f"SchemaError: createProject.{field} required"
+            assert has_key(data, keys), f"SchemaError: createProject.{field} required"
         else:
-            if _has_key(data, keys[:-1]):
-                assert _has_key(data, keys), f"SchemaError: createProject.{field} required"
+            if has_key(data, keys[:-1]):
+                assert has_key(data, keys), f"SchemaError: createProject.{field} required"
 
     # create
     prjId = service.create(**data["parameters"])
@@ -45,12 +44,3 @@ def create_project(data: dict):
     if scan := data.get("scan"):
         service.scan(prjId=prjId, dir=scan["dir"])
     return prjId
-
-
-def _has_key(data: dict, key_list: List[str]):
-    result = data
-    for key in key_list:
-        result = result.get(key)
-        if result is None:
-            return False
-    return True

@@ -1,0 +1,9 @@
+kind: executeCommand
+command: create project
+parameters:
+  prjName: testProject
+  prjVersion: 1
+  osType: Linux
+  distributionType: "General Model"
+  networkServerType: N
+  priority: P1
