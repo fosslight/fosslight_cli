@@ -10,7 +10,7 @@ update:
   models:
     modelListToUpdate: "ASDF|AV/Car/Security > AV|20201010"
   modelFile:
-    modelReport: "../data/ModelList.xlsx"
+    modelReport: "../../data/ModelList.xlsx"
   watchers:
 scan:
-  dir: "../data/simpleProject"
+  dir: "../../data/simpleProject"

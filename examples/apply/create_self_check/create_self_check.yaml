@@ -1,0 +1,6 @@
+kind: createSelfCheck
+parameters:
+  prjName: testprj
+  prjVersion: ${PRJ_VERSION}
+scan:
+  dir: "../../data/simpleProject"
