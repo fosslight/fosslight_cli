@@ -182,7 +182,7 @@ class ApiClient:
             "ossName": ossName,
             "ossVersion": ossVersion
         }
-        return self.get('/api/v2/max-vulnerability', params=params)
+        return self.get('/api/v2/max-vulnerabilities', params=params)
 
     def get_vulnerability(self, cveId: Optional[str] = None, ossName: Optional[str] = None, ossVersion: Optional[str] = None):
         params = {
@@ -191,6 +191,9 @@ class ApiClient:
             "ossVersion": ossVersion
         }
         return self.get('/api/v2/vulnerabilities', params=params)
+
+    def get_self_check_detail(self, id: str):
+        return self.get(f'/api/v2/selfchecks/{id}')
 
     def create_self_check(self, prjName: str, prjVersion: Optional[str] = None):
         data = {"prjName": prjName, "prjVersion": prjVersion}
