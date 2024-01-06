@@ -19,6 +19,11 @@ def get_project():
     pass
 
 
+@get.group("selfCheck")
+def get_self_check():
+    pass
+
+
 @get.group("license")
 def get_license():
     pass
@@ -77,6 +82,15 @@ def get_project_list(
 def get_project_models(prjIdList):
     data = ProjectService().get_models(prjIdList)
     pretty_print_dict(data)
+
+
+@get_self_check.command("detail")
+@click.option("--id", "id", help="selfCheck id")
+def get_self_check_detail(id):
+    client = get_api_client()
+    response = client.get_self_check_detail(id=id)
+    check_response(response)
+    pretty_print_dict(response.json())
 
 
 # license

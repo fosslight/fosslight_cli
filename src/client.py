@@ -192,6 +192,9 @@ class ApiClient:
         }
         return self.get('/api/v2/vulnerabilities', params=params)
 
+    def get_self_check_detail(self, id: str):
+        return self.get(f'/api/v2/selfchecks/{id}')
+
     def create_self_check(self, prjName: str, prjVersion: Optional[str] = None):
         data = {"prjName": prjName, "prjVersion": prjVersion}
         return self.post('/api/v2/selfchecks', data=data)
