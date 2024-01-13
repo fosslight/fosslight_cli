@@ -78,14 +78,14 @@ def get_project_list(
 
 
 @get_project.command("models")
-@click.option("--prjIdList", "prjIdList")
+@click.option("--prjIdList", "prjIdList", required=True)
 def get_project_models(prjIdList):
     data = ProjectService().get_models(prjIdList)
     pretty_print_dict(data)
 
 
 @get_self_check.command("detail")
-@click.option("--id", "id", help="selfCheck id")
+@click.option("--id", "id", required=True, help="selfCheck id")
 def get_self_check_detail(id):
     client = get_api_client()
     response = client.get_self_check_detail(id=id)
