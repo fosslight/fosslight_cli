@@ -64,13 +64,13 @@ class ApiClient:
     def update_project_models(self, prjId, modelListToUpdate: str):
         # modelListToUpdate: "Name1|AV/Car/Security > AV|20201010,Name2|AV/Car/Security > AV|20201010"
         params = {"modelListToUpdate": modelListToUpdate}
-        return self.put(f'/api/v2/projects/{prjId}/models', params=params)
+        return self.post(f'/api/v2/projects/{prjId}/models', params=params)
 
     def update_project_model_file(self, prjId, modelReport: bytes):
         files = {
             "modelReport": modelReport,
         }
-        return self.put(f'/api/v2/projects/{prjId}/models/upload', files=files)
+        return self.post(f'/api/v2/projects/{prjId}/models/upload', files=files)
 
     def update_project_bin(
         self,
@@ -88,7 +88,7 @@ class ApiClient:
             "resetFlag": resetFlag,
             "comment": comment,
         }
-        return self.put(f'/api/v2/projects/{prjId}/bin', data=data, files=files)
+        return self.post(f'/api/v2/projects/{prjId}/bin', data=data, files=files)
 
     def update_project_src(self, prjId: int, ossReport: Optional[bytes] = None, comment: Optional[str] = None, resetFlag: Optional[str] = None):
         files = {"ossReport": ossReport}
@@ -175,7 +175,7 @@ class ApiClient:
 
     def update_partner_watchers(self, partnerId: int, emailList: List[str]):
         data = {"emailList": emailList}
-        return self.put(f"/api/v2/partners/{partnerId}/watchers", data=data)
+        return self.post(f"/api/v2/partners/{partnerId}/watchers", data=data)
 
     def get_max_vulnerability(self, ossName: str, ossVersion: Optional[str] = None):
         params = {
@@ -206,10 +206,10 @@ class ApiClient:
         data = {
             "resetFlag": resetFlag
         }
-        return self.put(f'/api/v2/selfchecks/{selfCheckId}/report', files=files, data=data)
+        return self.post(f'/api/v2/selfchecks/{selfCheckId}/report', files=files, data=data)
 
     def update_self_check_watchers(self, selfCheckId: int, emailList: List[str]):
-        return self.put(f'/api/v2/selfchecks/{selfCheckId}/watchers', data={"emailList": emailList})
+        return self.post(f'/api/v2/selfchecks/{selfCheckId}/watchers', data={"emailList": emailList})
 
     def export_self_check(self, selfCheckId: int):
         return self.get(f'/api/v2/selfchecks/{selfCheckId}/export')
