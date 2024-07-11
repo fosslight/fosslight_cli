@@ -142,15 +142,22 @@ class ApiClient:
     def export_project_notice(self, prjId: str):
         return self.get(f'/api/v2/projects/{prjId}/notice')
 
-    def get_license_list(self, licenseName: str):
+    def get_license_list(self, licenseName: Optional[str] = None, licenseNameExact: Optional[str] = None,
+                         countPerPage: Optional[str] = None, page: Optional[str] = None):
         data = {"licenseName": licenseName}
         return self.get('/api/v2/licenses', params=data)
 
-    def get_oss(self, ossName: str, ossVersion: Optional[str] = None, downloadLocation: Optional[str] = None):
+    def get_oss(self, ossName: Optional[str] = None, ossNameExact: Optional[str] = None, ossVersion: Optional[str] = None,
+                downloadLocation: Optional[str] = None, downloadLocationExact: Optional[str] = None,
+                countPerPage: Optional[str] = None, page: Optional[str] = None):
         params = {
             "ossName": ossName,
+            "ossNameExact": ossNameExact,
             "ossVersion": ossVersion,
             "downloadLocation": downloadLocation,
+            "downloadLocationExact": downloadLocationExact,
+            "countPerPage": countPerPage,
+            "page": page,
         }
         return self.get('/api/v2/oss', params=params)
 
