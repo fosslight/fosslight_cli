@@ -30,7 +30,7 @@ class SelfCheckService:
         check_response(response)
 
     def update_watchers(self, selfCheckId, emailList):
-        response = get_api_client().update_selfCheck_watchers(
+        response = get_api_client().update_self_check_watchers(
             selfCheckId=selfCheckId,
             emailList=emailList,
         )

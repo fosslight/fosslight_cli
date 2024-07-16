@@ -139,7 +139,7 @@ def update_self_check_watchers(selfCheckId, emailList):
 def update_partner_watchers(partnerId, emailList):
     client = get_api_client()
     response = client.update_partner_watchers(
-        partnersId=partnerId,
+        partnerId=partnerId,
         emailList=emailList,
     )
     check_response(response)
