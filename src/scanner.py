@@ -16,7 +16,7 @@ class FosslightScanner:
         uid = uuid.uuid4()
         output_path = os.path.expanduser(f'{cls.BASE_PATH}/{uid}')
         run_main(
-            mode='all',
+            mode_list=["all"],
             path_arg=[path],
             dep_arguments='',
             output_file_or_dir=output_path,
