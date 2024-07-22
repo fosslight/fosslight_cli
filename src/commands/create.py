@@ -20,7 +20,7 @@ def create():
 @click.option('--osTypeEtc', 'osTypeEtc', help="")
 @click.option('--prjVersion', 'prjVersion', help="")
 @click.option('--publicYn', 'publicYn', help="")
-@click.option('--comment', 'comment', help="")
+@click.option('--additionalInformation', 'additionalInformation', help="")
 @click.option('--userComment', 'userComment', help="")
 @click.option('--watcherEmailList', 'watcherEmailList', help="")
 @click.option('--modelListToUpdate', 'modelListToUpdate', help="")
@@ -34,7 +34,7 @@ def create_project(
     osTypeEtc,
     prjVersion,
     publicYn,
-    comment,
+    additionalInformation,
     userComment,
     watcherEmailList,
     modelListToUpdate,
@@ -49,7 +49,7 @@ def create_project(
         osTypeEtc=osTypeEtc,
         prjVersion=prjVersion,
         publicYn=publicYn,
-        comment=comment,
+        additionalInformation=additionalInformation,
         userComment=userComment,
         watcherEmailList=watcherEmailList,
         modelListToUpdate=modelListToUpdate,

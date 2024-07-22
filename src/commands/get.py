@@ -95,10 +95,14 @@ def get_self_check_detail(id):
 
 # license
 @get_license.command("list")
-@click.option("--licenseName", "licenseName", required=True, help="license name")
-def get_license_list(licenseName):
+@click.option("--licenseName", "licenseName", help="license name")
+@click.option("--licenseNameExact", "licenseNameExact", help="license name exact match flag")
+@click.option("--count", "countPerPage", help="item count per page")
+@click.option("--page", "page", help="page number")
+def get_license_list(licenseName, licenseNameExact, countPerPage, page):
     client = get_api_client()
-    response = client.get_license_list(licenseName=licenseName)
+    response = client.get_license_list(licenseName=licenseName, licenseNameExact=licenseNameExact,
+                                       countPerPage=countPerPage, page=page)
     if response.status_code == 404:
         display_text("Not found")
         return
@@ -108,15 +112,23 @@ def get_license_list(licenseName):
 
 # oss
 @get_oss.command("list")
-@click.option("--ossName", "ossName", required=True, help="oss name")
+@click.option("--ossName", "ossName", help="oss name")
+@click.option("--ossNameExact", "ossNameExact", help="oss name exact match flag")
 @click.option("--ossVersion", "ossVersion", help="oss version")
 @click.option("--downloadLocation", "downloadLocation", help="download location")
-def get_oss_list(ossName, ossVersion, downloadLocation):
+@click.option("--downloadLocationExact", "downloadLocationExact", help="download location exact match flag")
+@click.option("--count", "countPerPage", help="item count per page")
+@click.option("--page", "page", help="page number")
+def get_oss_list(ossName, ossNameExact, ossVersion, downloadLocation, downloadLocationExact, countPerPage, page):
     client = get_api_client()
     response = client.get_oss(
         ossName=ossName,
+        ossNameExact=ossNameExact,
         ossVersion=ossVersion,
         downloadLocation=downloadLocation,
+        downloadLocationExact=downloadLocationExact,
+        countPerPage=countPerPage,
+        page=page
     )
     check_response(response)
     pretty_print_dict(response.json())

@@ -34,7 +34,7 @@ class ApiClient:
         osTypeEtc: Optional[str] = None,
         prjVersion: Optional[str] = None,
         publicYn: Optional[str] = None,
-        comment: Optional[str] = None,
+        additionalInformation: Optional[str] = None,
         userComment: Optional[str] = None,
         watcherEmailList: Optional[List[str]] = None,
         modelListToUpdate: Optional[List[str]] = None,
@@ -49,7 +49,7 @@ class ApiClient:
             "osTypeEtc": osTypeEtc,
             "prjVersion": prjVersion,
             "publicYn": publicYn,
-            "comment": comment,
+            "additionalInformation": additionalInformation,
             "userComment": userComment,
             "watcherEmailList": watcherEmailList,
             "modelListToUpdate": modelListToUpdate,
@@ -64,13 +64,13 @@ class ApiClient:
     def update_project_models(self, prjId, modelListToUpdate: str):
         # modelListToUpdate: "Name1|AV/Car/Security > AV|20201010,Name2|AV/Car/Security > AV|20201010"
         params = {"modelListToUpdate": modelListToUpdate}
-        return self.put(f'/api/v2/projects/{prjId}/models', params=params)
+        return self.post(f'/api/v2/projects/{prjId}/models', params=params)
 
     def update_project_model_file(self, prjId, modelReport: bytes):
         files = {
             "modelReport": modelReport,
         }
-        return self.put(f'/api/v2/projects/{prjId}/models/upload', files=files)
+        return self.post(f'/api/v2/projects/{prjId}/models/upload', files=files)
 
     def update_project_bin(
         self,
@@ -88,7 +88,7 @@ class ApiClient:
             "resetFlag": resetFlag,
             "comment": comment,
         }
-        return self.put(f'/api/v2/projects/{prjId}/bin', data=data, files=files)
+        return self.post(f'/api/v2/projects/{prjId}/bin', data=data, files=files)
 
     def update_project_src(self, prjId: int, ossReport: Optional[bytes] = None, comment: Optional[str] = None, resetFlag: Optional[str] = None):
         files = {"ossReport": ossReport}
@@ -142,15 +142,22 @@ class ApiClient:
     def export_project_notice(self, prjId: str):
         return self.get(f'/api/v2/projects/{prjId}/notice')
 
-    def get_license_list(self, licenseName: str):
+    def get_license_list(self, licenseName: Optional[str] = None, licenseNameExact: Optional[str] = None,
+                         countPerPage: Optional[str] = None, page: Optional[str] = None):
         data = {"licenseName": licenseName}
         return self.get('/api/v2/licenses', params=data)
 
-    def get_oss(self, ossName: str, ossVersion: Optional[str] = None, downloadLocation: Optional[str] = None):
+    def get_oss(self, ossName: Optional[str] = None, ossNameExact: Optional[str] = None, ossVersion: Optional[str] = None,
+                downloadLocation: Optional[str] = None, downloadLocationExact: Optional[str] = None,
+                countPerPage: Optional[str] = None, page: Optional[str] = None):
         params = {
             "ossName": ossName,
+            "ossNameExact": ossNameExact,
             "ossVersion": ossVersion,
             "downloadLocation": downloadLocation,
+            "downloadLocationExact": downloadLocationExact,
+            "countPerPage": countPerPage,
+            "page": page,
         }
         return self.get('/api/v2/oss', params=params)
 
@@ -175,7 +182,7 @@ class ApiClient:
 
     def update_partner_watchers(self, partnerId: int, emailList: List[str]):
         data = {"emailList": emailList}
-        return self.put(f"/api/v2/partners/{partnerId}/watchers", data=data)
+        return self.post(f"/api/v2/partners/{partnerId}/watchers", data=data)
 
     def get_max_vulnerability(self, ossName: str, ossVersion: Optional[str] = None):
         params = {
@@ -206,10 +213,10 @@ class ApiClient:
         data = {
             "resetFlag": resetFlag
         }
-        return self.put(f'/api/v2/selfchecks/{selfCheckId}/report', files=files, data=data)
+        return self.post(f'/api/v2/selfchecks/{selfCheckId}/report', files=files, data=data)
 
     def update_self_check_watchers(self, selfCheckId: int, emailList: List[str]):
-        return self.put(f'/api/v2/selfchecks/{selfCheckId}/watchers', data={"emailList": emailList})
+        return self.post(f'/api/v2/selfchecks/{selfCheckId}/watchers', data={"emailList": emailList})
 
     def export_self_check(self, selfCheckId: int):
         return self.get(f'/api/v2/selfchecks/{selfCheckId}/export')
